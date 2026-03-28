@@ -71,22 +71,9 @@ const pool = new Pool({
   }
 });
 
-const missingPgVars = REQUIRED_PG_VARS.filter((v) => !process.env[v]);
 
-if (missingPgVars.length > 0) {
-  throw new Error(
-    `Missing DB env vars: ${missingPgVars.join(', ')}`
-  );
-}
 
-const pool = new Pool({
-  host: process.env.PGHOST,
-  port: Number(process.env.PGPORT || 5432),
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
-  connectionTimeoutMillis: 5000
-});
+
 
 const dbQuery = (text, params = []) => pool.query(text, params);
 
