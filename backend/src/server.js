@@ -11,7 +11,13 @@ import nodemailer from 'nodemailer';
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: '*', exposedHeaders: ['Authorization'] }));
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
+  credentials: true,
+  exposedHeaders: ['Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 const PORT = process.env.PORT || 4000;
