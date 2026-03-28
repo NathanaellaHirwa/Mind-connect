@@ -17,7 +17,7 @@ type AuthResponse = {
   verificationLink?: string;
 };
 
-const API_URL = '/api';
+const API_URL = 'https://mindconnect-api.up.railway.app';
 
 export function useAuth() {
   const [token, setToken] = useState<string | null>(localStorage.getItem('mc_token'));
