@@ -13,7 +13,7 @@ import WellnessCheckPage from './pages/WellnessCheck';
 import Profile from './pages/Profile';
 import Layout from './layout/Layout';
 
-const API_URL = '/api';
+const API_URL = 'https://mindconnect-api.up.railway.app';
 const EMAIL_VERIFICATION_ENABLED = false;
 const PASSWORD_RESET_ENABLED = false;
 
