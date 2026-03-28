@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  background: radial-gradient(circle at 20% 20%, #e6fff2 0, transparent 35%),
+              radial-gradient(circle at 80% 0%, #e0f2fe 0, transparent 30%),
+              linear-gradient(145deg, #f8fbff 0%, #f1f9f4 100%);
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: transparent;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-white font-semibold shadow-lg shadow-brand-200/70 hover:shadow-brand-300/80 hover:-translate-y-0.5 transition-transform transition-shadow;
+}
+
+.card {
+  @apply rounded-2xl bg-white/80 backdrop-blur border border-white/60 shadow-[0_10px_40px_-18px_rgba(15,23,42,0.35)];
+}
+
+input, textarea, select {
+  @apply rounded-xl border border-slate-200/70 bg-white/80 backdrop-blur px-3 py-2 text-slate-800 shadow-inner shadow-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-200 transition;
+}
+
+label {
+  @apply text-sm font-semibold text-slate-600;
+}
