@@ -64,9 +64,13 @@ const APP_BASE_URL =
    ✅ DATABASE
 ========================= */
 
-const { Pool } = pg;
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
-const REQUIRED_PG_VARS = ['PGHOST', 'PGUSER', 'PGPASSWORD', 'PGDATABASE'];
 const missingPgVars = REQUIRED_PG_VARS.filter((v) => !process.env[v]);
 
 if (missingPgVars.length > 0) {
