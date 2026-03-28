@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
-import pg from 'pg';
+import { Pool } from 'pg'; // ✅ corrected
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 
 /* =========================
-   ✅ CORS CONFIG (UPDATED)
+   ✅ CORS CONFIG
 ========================= */
 
 const allowedOrigins = [
@@ -70,10 +70,6 @@ const pool = new Pool({
     rejectUnauthorized: false
   }
 });
-
-
-
-
 
 const dbQuery = (text, params = []) => pool.query(text, params);
 
@@ -150,7 +146,7 @@ const authMiddleware = (req, res, next) => {
 };
 
 /* =========================
-   ✅ EMAIL TOKENS (UPDATED URLs)
+   ✅ EMAIL TOKENS
 ========================= */
 
 const issueEmailVerification = async ({ userId, email, name }) => {
@@ -207,7 +203,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 /* =========================
-   ✅ AUTH ROUTES (UNCHANGED)
+   ✅ AUTH ROUTES
 ========================= */
 
 app.post('/api/auth/register', async (req, res) => {
