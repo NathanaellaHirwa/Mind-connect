@@ -135,8 +135,12 @@ export default function ResourcesPage({ resources }: { resources: Resource[] }) 
   const [expanded, setExpanded] = useState<string | null>(null);
 
   const data = useMemo<ResourceCard[]>(() => {
-    const source = resources?.length ? resources.map(normalizeResource) : SAMPLE_RESOURCES;
-    return activeCategory === 'all' ? source : source.filter((r) => r.category === activeCategory);
+    if (!resources || resources.length === 0) {
+      console.warn('⚠️ No resources data from backend');
+      return [];
+    }
+    const normalized = resources.map(normalizeResource);
+    return activeCategory === 'all' ? normalized : normalized.filter((r) => r.category === activeCategory);
   }, [resources, activeCategory]);
 
   return (

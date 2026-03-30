@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-const links = [
+const baseLinks = [
   { to: '/dashboard', label: 'Dashboard', icon: '📊' },
   { to: '/tasks', label: 'My Tasks', icon: '✅' },
   { to: '/goals', label: 'My Goals', icon: '🎯' },
@@ -10,11 +10,22 @@ const links = [
 ];
 
 type Props = {
-  user: { name: string; email: string } | null;
+  user: { name: string; email: string; role?: string } | null;
   onSignOut: () => void;
 };
 
 export default function SidebarNav({ user, onSignOut }: Props) {
+  const adminLinks = user?.role === 'admin' ? [
+    { to: '/admin/professionals', label: 'Manage Professionals', icon: '👥' },
+    { to: '/admin/resources', label: 'Manage Resources', icon: '📁' }
+  ] : [];
+
+  const links = [
+    ...baseLinks,
+    { to: '/book', label: 'Book Session', icon: '📅' },
+    ...adminLinks
+  ];
+
   return (
     <aside className="w-64 bg-white/85 border-r border-white/70 backdrop-blur-xl hidden lg:flex flex-col">
       <div className="px-5 py-6 border-b border-white/70">
@@ -38,6 +49,12 @@ export default function SidebarNav({ user, onSignOut }: Props) {
             {link.label}
           </NavLink>
         ))}
+        {user?.role === 'admin' && (
+          <>
+            <div className="my-4 h-px bg-slate-200" />
+            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-2 py-2 mb-1">Admin</div>
+          </>
+        )}
       </nav>
       <div className="px-4 py-4 border-t border-white/70">
         <div className="rounded-xl bg-brand-50 border border-brand-100 p-3 text-sm text-slate-700">

@@ -36,6 +36,8 @@ export type Professional = {
   rating?: number;
   photoUrl?: string;
   photo_url?: string;
+  imageUrl?: string;
+  image_url?: string;
 };
 
 export type Booking = {
@@ -58,6 +60,10 @@ export type Chat = {
   professionalId: string;
   messages: Message[];
 };
+
+export type AdminResourcesProps = { token: string; refreshResources?: () => Promise<void> };
+
+export type AdminProfessionalsProps = { token: string; refreshProfessionals?: () => Promise<void> };
 
 export type Resource = {
   id: string;

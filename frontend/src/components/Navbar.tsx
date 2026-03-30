@@ -2,21 +2,30 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-const links = [
-  { to: '/dashboard', label: 'Dashboard' },
-  { to: '/tasks', label: 'Tasks' },
-  { to: '/goals', label: 'Goals' },
-  { to: '/book', label: 'Book' },
-  { to: '/professionals', label: 'Pros' },
-  { to: '/resources', label: 'Resources' },
-  { to: '/wellness', label: 'Wellness' },
-  { to: '/profile', label: 'Profile' }
-];
+
 
 export default function Navbar() {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+
+  const baseLinks = [
+    { to: '/dashboard', label: 'Dashboard' },
+    { to: '/tasks', label: 'Tasks' },
+    { to: '/goals', label: 'Goals' },
+    { to: '/book', label: 'Book' },
+    { to: '/professionals', label: 'Pros' },
+    { to: '/resources', label: 'Resources' },
+    { to: '/wellness', label: 'Wellness' },
+    { to: '/profile', label: 'Profile' }
+  ];
+
+  const adminLinks = user?.role === 'admin' ? [
+    { to: '/admin/professionals', label: 'Admin Pros' },
+    { to: '/admin/resources', label: 'Admin Res' }
+  ] : [];
+
+  const links = [...baseLinks, ...adminLinks];
 
   return (
     <header className="border-b border-white/60 bg-white/70 backdrop-blur-xl sticky top-0 z-30 shadow-[0_10px_40px_-24px_rgba(15,23,42,0.45)]">
@@ -47,6 +56,13 @@ export default function Navbar() {
             {link.label}
           </NavLink>
         ))}
+        {user?.role === 'admin' && (
+          <>
+            <div className="px-3 py-1">
+              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Admin</div>
+            </div>
+          </>
+        )}
       </nav>
     </header>
   );

@@ -11,9 +11,11 @@ import ResourcesPage from './pages/Resources';
 import WellnessPage from './pages/Wellness';
 import WellnessCheckPage from './pages/WellnessCheck';
 import Profile from './pages/Profile';
+import AdminProfessionals from './pages/AdminProfessionals';
+import AdminResources from './pages/AdminResources';
 import Layout from './layout/Layout';
 
-const API_URL = 'https://mindconnect-api.up.railway.app';
+const API_URL = '/api';
 const EMAIL_VERIFICATION_ENABLED = false;
 const PASSWORD_RESET_ENABLED = false;
 
@@ -44,29 +46,73 @@ function App() {
 
   useEffect(() => {
     if (!token) return;
+    
     const load = async () => {
-      const [tasksRes, goalsRes, prosRes, bookingsRes, resourcesRes, remindersRes, notesRes, wellnessRes] = await Promise.all([
-        fetch(`${API_URL}/tasks`, { headers }),
-        fetch(`${API_URL}/goals`, { headers }),
-        fetch(`${API_URL}/professionals`),
-        fetch(`${API_URL}/bookings`, { headers }),
-        fetch(`${API_URL}/resources`),
-        fetch(`${API_URL}/reminders`, { headers }),
-        fetch(`${API_URL}/notifications`, { headers }),
-        fetch(`${API_URL}/wellness-checks`, { headers })
-      ]);
-      setTasks(await tasksRes.json());
-      setGoals(await goalsRes.json());
-      setProfessionals(await prosRes.json());
-      setBookings(await bookingsRes.json());
-      setResources(await resourcesRes.json());
-      const reminderData = await remindersRes.json();
-      setReminders(reminderData.dueSoon || []);
-      setNotifications(await notesRes.json());
-      setWellnessChecks(await wellnessRes.json());
+      try {
+        const [tasksRes, goalsRes, prosRes, bookingsRes, resourcesRes, remindersRes, notesRes, wellnessRes] = await Promise.all([
+          fetch(`${API_URL}/tasks`, { headers }),
+          fetch(`${API_URL}/goals`, { headers }),
+          fetch(`${API_URL}/professionals`),
+          fetch(`${API_URL}/bookings`, { headers }),
+          fetch(`${API_URL}/resources`),
+          fetch(`${API_URL}/reminders`, { headers }),
+          fetch(`${API_URL}/notifications`, { headers }),
+          fetch(`${API_URL}/wellness-checks`, { headers })
+        ]);
+        
+        // Check for API errors
+        if (!prosRes.ok) throw new Error(`Professionals API error: ${prosRes.status}`);
+        if (!resourcesRes.ok) throw new Error(`Resources API error: ${resourcesRes.status}`);
+        
+        const tasksData = await tasksRes.json();
+        const goalsData = await goalsRes.json();
+        const prosData = await prosRes.json();
+        const bookingsData = await bookingsRes.json();
+        const resourcesData = await resourcesRes.json();
+        const remindersData = await remindersRes.json();
+        const notesData = await notesRes.json();
+        const wellnessData = await wellnessRes.json();
+        
+        console.log('✅ Professionals from backend:', prosData.length);
+        console.log('✅ Resources from backend:', resourcesData.length);
+        
+        setTasks(tasksData);
+        setGoals(goalsData);
+        setProfessionals(prosData);
+        setBookings(bookingsData);
+        setResources(resourcesData);
+        setReminders(remindersData.dueSoon || []);
+        setNotifications(notesData);
+        setWellnessChecks(wellnessData);
+      } catch (err) {
+        console.error('❌ Failed to load data:', err);
+        setError(err instanceof Error ? err.message : 'Unable to load data');
+      }
     };
-    load().catch(() => setError('Unable to load data'));
+    load();
   }, [token, headers]);
+
+  const refreshResources = async () => {
+    try {
+      const res = await fetch(`${API_URL}/resources`);
+      if (!res.ok) throw new Error(`Resources API error: ${res.status}`);
+      const data = await res.json();
+      setResources(data);
+    } catch (err) {
+      console.error('Failed to refresh resources:', err);
+    }
+  };
+
+  const refreshProfessionals = async () => {
+    try {
+      const res = await fetch(`${API_URL}/professionals`);
+      if (!res.ok) throw new Error(`Professionals API error: ${res.status}`);
+      const data = await res.json();
+      setProfessionals(data);
+    } catch (err) {
+      console.error('Failed to refresh professionals:', err);
+    }
+  };
 
   const addTask = async (task: { title: string; description?: string; dueDate?: string }) => {
     const res = await fetch(`${API_URL}/tasks`, {
@@ -300,6 +346,12 @@ function App() {
         <Route path="/resources" element={<ResourcesPage resources={resources} />} />
         <Route path="/wellness" element={<WellnessPage resources={resources} />} />
         <Route path="/wellness-check" element={<WellnessCheckPage checks={wellnessChecks} onSubmit={submitWellnessCheck} />} />
+        {user?.role === 'admin' && (
+          <>
+<Route path="/admin/professionals" element={<AdminProfessionals token={token} refreshProfessionals={refreshProfessionals} />} />
+<Route path="/admin/resources" element={<AdminResources token={token} refreshResources={refreshResources} />} />
+          </>
+        )}
         <Route
           path="/profile"
           element={

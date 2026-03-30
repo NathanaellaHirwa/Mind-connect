@@ -17,11 +17,15 @@ type AuthResponse = {
   verificationLink?: string;
 };
 
-const API_URL = 'https://mindconnect-api.up.railway.app';
+const API_URL = '/api';
 
 export function useAuth() {
-  const [token, setToken] = useState<string | null>(localStorage.getItem('mc_token'));
+  const [token, setToken] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('mc_token');
+  });
   const [user, setUser] = useState<User | null>(() => {
+    if (typeof window === 'undefined') return null;
     const saved = localStorage.getItem('mc_user');
     return saved ? JSON.parse(saved) : null;
   });

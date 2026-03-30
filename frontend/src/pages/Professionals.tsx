@@ -217,8 +217,11 @@ export default function ProfessionalsPage({ professionals, onBook }: Props) {
   const [bookingForm, setBookingForm] = useState(initialBookingForm);
 
   const list = useMemo(() => {
-    const source = professionals.length ? professionals : SAMPLE_PROFESSIONALS;
-    return source.map(normalizeProfessional);
+    if (!professionals || professionals.length === 0) {
+      console.warn('⚠️ No professionals data from backend');
+      return [];
+    }
+    return professionals.map(normalizeProfessional);
   }, [professionals]);
 
   const filtered = useMemo(() => {
