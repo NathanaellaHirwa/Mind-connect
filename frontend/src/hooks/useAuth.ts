@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { API_URL } from '../config';
 
 type User = {
   id: string;
@@ -16,8 +17,6 @@ type AuthResponse = {
   message?: string;
   verificationLink?: string;
 };
-
-const API_URL = '/api';
 
 export function useAuth() {
   const [token, setToken] = useState<string | null>(() => {

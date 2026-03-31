@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Professional, AdminProfessionalsProps } from '../types';
+import { API_URL } from '../config';
 
 type FormData = {
   id?: string;
@@ -11,8 +12,6 @@ type FormData = {
   bio: string;
   yearsExperience: number;
 };
-
-const API_URL = '/api';
 
 export default function AdminProfessionalsPage({ token, refreshProfessionals }: AdminProfessionalsProps) {
   const [professionals, setProfessionals] = useState<Professional[]>([]);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Resource, AdminResourcesProps } from '../types';
+import { API_URL } from '../config';
 
 type FormData = {
   id?: string;
@@ -10,8 +11,6 @@ type FormData = {
   tag: string;
   description: string;
 };
-
-const API_URL = '/api';
 
 export default function AdminResourcesPage({ token, refreshResources }: AdminResourcesProps) {
   const [resources, setResources] = useState<Resource[]>([]);

@@ -14,8 +14,8 @@ import Profile from './pages/Profile';
 import AdminProfessionals from './pages/AdminProfessionals';
 import AdminResources from './pages/AdminResources';
 import Layout from './layout/Layout';
+import { API_URL } from './config';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
 const EMAIL_VERIFICATION_ENABLED = false;
 const PASSWORD_RESET_ENABLED = false;
 
